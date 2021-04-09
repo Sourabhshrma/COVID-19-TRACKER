@@ -12,11 +12,8 @@ import './App.css';
 import {sortData, prettyPrintStat} from './utils';
 import Chart from './Chart';
 import "leaflet/dist/leaflet.css";
-import { ThemeProvider } from 'styled-components';
 import { lightTheme, darkTheme } from './Theme';
-import { GlobalStyles } from './Globals';
-import Toggle from './Toggle.js';
-import { useDarkMode } from './useDarkMode';
+
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -28,16 +25,10 @@ function App() {
   const [mapZoom, setMapZoom] = useState(3);
   const [mapCountries, setMapCountries] = useState([]);
   const [casesType, setCasesType] = useState('cases');
-  const [theme, toggleTheme, componentMounted] = useDarkMode();
-  const themeMode = theme === 'light' ? lightTheme : darkTheme;
+  const themeMode = darkTheme;
+  const theme = 'dark';
 
-  useEffect(() => {
-      fetch('https://disease.sh/v3/covid-19/all')
-      .then(resp => resp.json())
-      .then(data =>{
-        setCountryInfo(data);
-      });
-  }, [])
+  
 
   useEffect(() => {
     const getCountries = async () => {
@@ -81,21 +72,13 @@ function App() {
     })
   };
 
-  if (!componentMounted) {
-    return <div />
-  };
-
+  
   return (
     <div className={`app ${theme==='dark' && "app--dark"}`}>
       <div className={`app__left ${theme==='dark' && "app__left--dark"}`}>
         <div className={`app__header ${theme==='dark' && "app__header--dark"}`}>
           <h1>Covid Tracker</h1>
-          <ThemeProvider theme={themeMode}>
-            <>
-              <GlobalStyles />
-              <Toggle theme={theme} toggleTheme={toggleTheme} />
-            </>
-          </ThemeProvider>
+          
           <FormControl className={`app__dropdown ${theme==='dark' && "app__dropdown--dark"}`}>
             <Select variant="outlined"
                     value={country}
